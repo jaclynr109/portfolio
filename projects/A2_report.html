@@ -1,0 +1,210 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<title>Vis & Society Assignment 2</title>
+	<link rel="stylesheet" href="https://vis-society.github.io/assignments/report.css" />
+</head>
+
+<body>
+	<header>
+		<h1>
+			<small>Assignment 2</small>
+			Exploratory Data Analysis
+		</h1>
+
+		<p>
+			<strong>Jaclyn Rambarran</strong> — <em>jaclynr6@mit.edu</em>
+		</p>
+	</header>
+	<main>
+		<section>
+			<h2>Subtheme: Exploring Corporate Owners and Evictions</h2>
+
+			<h3>Data Overview</h3>
+			<p>
+				The dataset used in this analysis is the corporate ownership and owner occupancy rates in Boston
+				neighborhoods for 2004-2024, with census demographic data layered in. The data was sourced from City of Boston's
+				Property Assessment Data, the city's dataset for neighborhood boundaries (approximated by 2020 census tracts), and
+				the US Census Bureau. While I was initially interested in exploring how demographic trends changed over time- along
+				with corporate ownership rates and housing unit vacancies, to understand gentrification- the census data was discovered to be the same (static) for each year
+				in the dataset. My inquiries were therefore limited to exploring vacancies and corporate ownership over time, while demographic data was used to
+				contextualize the findings.
+
+			<h3>Overall Analysis Questions</h3>
+			<p> The report on Housing Justice Beyond the Emergency Analysis by Homes for All 
+				Massachusetts and researchers at MIT concludes that accross the Commonwealth, concentrated ownership by corporate
+				landlords was strongly associated with higher eviction filing rates, while presence of live in 
+				landlords as associated with housing stability. Places with larger percentages of Black and Latinx 
+				renters, in particular, tended to see higher rates of eviction filing. The report notes a large body of research 
+				that demonstrates corporate property ownership exacerbates housing injustice. I am broadly interested in exploring if these same trends
+				emerge in the dataset provided when looking more granularly at Boston neighborhoods. From this motivation, I examine data with the following questions in mind:
+			</p>
+			<ol>
+				<li>How have rates of owner occupancy and corporate ownership changed over time in Boston?</li>
+				<li>Are corporate ownership rates higher in neighborhoods with more diverse populations?</li>
+				<li>How does rising corporate ownership affect housing vacancies?</li>
+				<li>What features of neighborhoods might affect the relationship between corporate ownership and vacancy?</li>
+			</ol>
+		</section>
+
+		<section>
+			<h2>Data Validation and Consistency Checks</h2>
+			<p>
+				<ol>Prior to visual analysis, I conducted a number of internal consistency checks to verify structure and completeness of the dataset. Through this, I ensured that:
+					<li>Occupied and vacant units sum to total units</li>
+					<li>Age-based population counts sum to total population</li>
+					<li>Racial category counts sum to neighborhood-level totals</li>
+					<li>Group quarters subcategories (residents in college, military, corrections, juvenile, nursing, other institution, other non-institution housing) sum to total group quarters population</li>
+				No systematic accounting discrepancies were detected. The dataset contains 441 neighborhood-year observations spanning 21 neighborhoods over 2004–2024.
+				</p>
+			<h2>Discoveries & Insights</h2>
+
+			<figure>
+				<img src="Pic1.png" alt="" />
+				<figcaption>
+					Figure 1 shows the distributions of corporate ownership rate and owner occupancy rate across all 441 neighborhood-year observations (21 neighborhoods observed annually from 2004–2024). These distributions characterize the overall structure and range of the dataset prior to substantive analysis. 
+					In finalizing these, I would move the observation count into an annotation as it is visually heavy in these figures. Also, I would align the y and x axes so these 2 figures could better serve as small multiples. The misalignment of the axes renders comparison challenging at first look. The distribution reflects both temporal and cross-sectional variation given all 441 neighborhood-years were included. 
+					What I do notice despite the misalignment of the axes is that corporate ownership and owner occupancy rates do not seem to sum to 100%. This indicates other non-corporate, non-owner landlord or classification challenges that are not accounted for. My analysis questions do not depend on data on complete ownership structure, so this is a nonissue for this task.
+					There were no null values identified in the dataset, and there are no corporate ownership or owner occupancy that pose notable data quality issues. The rates are all bounded between 0 and 1 (0 and 100%) as expected. 
+
+				</figcaption>
+			</figure>
+
+			<figure>
+				<img src="Pic2.png" alt="" />
+				<figcaption>
+					I next explored vacancy rate and racial diversity indices, which I constructed. The vacancy rate is constructed as the proportion of vacant housing units (vacant_unit) relative to total housing units (tot_unit) for each neighborhood-year observation. The racial diversity index is accounts for only 21 observations, given demographic data is static throughout the dataset. 
+
+
+					<p><strong>Construction of the Racial Diversity Index.</strong> 
+					I calculated a racial diversity index for each neighborhood using a standard fractionalization measure. The index is defined as:</p>
+					
+					<p style="margin-left: 1.25em;">
+					  D = 1 − (
+					  Pct White<sup>2</sup> +
+					  Pct Black<sup>2</sup> +
+					  Pct Hisp<sup>2</sup> +
+					  Pct Aapi<sup>2</sup> +
+					  Pct Aian<sup>2</sup> +
+					  Pct Two or More<sup>2</sup> +
+					  Pct Other<sup>2</sup>
+					  )
+					</p>
+					
+					<p>
+					This index reflects the share of the neighborhood population identifying with the specified racial or ethnic category. It ranges from 0 to 1; values close to 0 have more racial homogeneity and values near 1 exhibit greater racial diversity based on the census data demographic totals. 
+					</p>
+					<p>
+					Formula for index from Drazanova, L. (2020). <em>Introducing the Historical Index of Ethnic Fractionalization (HIEF) dataset: Accounting for longitudinal changes in ethnic diversity</em>. 
+					<em>Journal of Open Humanities Data, 6</em>, Article 6. 
+					<a href="https://doi.org/10.5334/johd.16" target="_blank">
+					https://doi.org/10.5334/johd.16
+					</a>
+					</p>
+					There were no null values identified in the dataset or vacancy rates that pose notable data quality issues. The rates are all bounded between 0 and 1 (0 and 100%) as expected. 
+					Because census data is static throughout time in the dataset, the variation in diversity index reflects differences between neighborhoods and not change over time. Comparing the owner occupancy and corporate ownership rate structures, we begin to see evidence of the expected inverse relationship between them (i.e. more owner occupancy results in less corporate ownership and vice versa). Vacancy rates are mostly low, with a much smaller number of neighborhood-year points exhibiting higher vacancy. This is consistent with expectations that vacancy rates have a left skew.
+					Overall, the dataset exhibits bounded, plausible ranges and no visible extreme anomalies. 
+					
+				</figcaption>
+			</figure>
+
+			<figure>
+				<img src="Pic3.png" alt="" />
+				<figcaption>
+					My first question that drives my analysis is how the corporate ownership rates change over time in the city. This figure displays the citywide average corporate ownership rate and owner occupancy rate across Boston neighborhoods from 2004 to 2024. Corporate ownership is measured as the share of properties classified as corporate-owned among all properties with non-missing ownership status, while owner occupancy is measured as the share of occupied housing units that are owner-occupied. The data reveal a steady increase in corporate ownership over time, accelerating more steeply after 2019, concurrent with a gradual decline in owner occupancy. The diverging trends suggests a shift in the composition of housing ownership at the city level.
+
+					Decimals feel clearer to me, so I have opted for decimals for ownership rate instead of percentages, as was used in the histograms above. 
+					
+					In a subsequent iteration, the figure could include point annotations highlighting key benchmark years (e.g., 2019), indicating that approximately X% of housing units were owner-occupied while Y% were corporate-owned on average at the citywide level. Such annotations would improve interpretability by grounding trends.
+					
+					From this, I am curious to know if the trends are consistent on the neighborhood level.
+					
+				</figcaption>
+			</figure>
+
+			<figure>
+				<img src="Heatmap.png" alt="" />
+				<figcaption>
+					I have opted for a heat map that shows how the corporate ownership rate has changed over time for each individual neighborhood. Each cell of the heatmap represents the corporate ownership rate in a given neighborhood-year, measured as the share of properties classified as corporate-owned among all properties with non-missing ownership status. Darker shading indicates higher corporate ownership. The figure shows that the upward shift in corporate ownership rates is, in fact, consistent across most neighborhoods over time. The South Boston Waterfront exhibits an exceptional pattern, with corporate ownership rising until 2011 and then dipping a bit until 2016. We can see that Longwood, Fenway, and Chinatown had higher rates of corporate ownership in 2004 than other neighborhoods, and these were also stable until around 2016. Downtown, Longwood, Fenway, and South Boston Waterfront are the neighborhoods with the highest rates of corporate ownership in 2024 (above 30%). 
+
+					Although the heatmap illustrates temporal trends across neighborhoods and reveals a pattern with the South Boston Waterfront that might otherwise be missed, I cannot clearly identify the quantity or the rate of change. A direct comparison of 2004 and 2024, excluding intermediates years, highlights which neighborhoods experienced the largest increases.
+					
+				</figcaption>
+			</figure>
+
+			<figure>
+				<img src="Pic4.png" alt="" />
+				<figcaption>
+					This figure compares corporate ownership rates across Boston neighborhoods in 2004 and 2024. Each bar is the share of housing units classified as corporate-owned among properties with non-missing ownership status. Neighborhoods are ordered by their 2024 corporate ownership rate. The figure reveals noticeable increases across all neighborhoods. West Roxbury had the lowest rate of corporate ownership in 2004 of all Boston neighborhoods in the dataset, but Hyde Park had the lowest rate by 2024. South Boston Waterfront has a 38% corporate ownership rate in 2024, the largest of any Boston neighborhoods that year. It would be helpful to add percent change or growth of corporate ownership by neighborhood to this figure.
+				</figcaption>
+			</figure>
+
+			<figure>
+				<img src="Pic5_map_corporate.png" alt="" />
+				<img src="Pic5_map_RDI.png" alt="" />
+				<figcaption>
+					The next question I am interested is if corporate ownership rates are higher in more diverse neighborhoods of Boston. To begin to explore this, I filter to just 2024 and use the City’s approximated neighborhood boundary shapefiles from the 2020 census to map corporate ownership and racial diversity. As seen when comparing the 2 maps, they exhibit distinct but partially overlapping spatial patterns. Corporate ownership is highest in several waterfront and central neighborhoods, including South Boston Waterfront, Fenway, and Longwood (which we established previously as well). In contrast, the racial diversity index is highest in several southern neighborhoods, including Roxbury, Dorchester, and Mattapan, and lower in parts of the northern and waterfront areas. In a future iteration of this figure, I would label these representative neighborhoods for clarity. There are some neighborhoods with higher diversity and moderate corporate ownership, but the spatial correspondence between the two measures is not consistent. Visual inspection here does not demonstrate a one-to-one relationship, driving the need for a more direct examination of the association between diversity and corporate ownership. 
+				</figcaption>
+			</figure>
+
+			<figure>
+				<img src="Pic6.png" alt="" />
+				<figcaption>
+					For a more direct assessment of the extent to which corporate ownership rates are higher in more diverse neighborhoods, I explore the cross-sectional relationship between the racial diversity index and corporate ownership rate in 2024. Each point represents a neighborhood, with a fitted linear trend shown for reference. Contrary to my initial expectation, the relationship appears slightly negative, as neighborhoods with higher racial diversity indices trend towards lower corporate ownership rates. While variation remains substantial across neighborhoods, the scatterplot indicates that corporate ownership in 2024 is not concentrated in the city’s most racially diverse neighborhoods.
+				</figcaption>
+			</figure>
+
+			<figure>
+				<img src="Pic7.png" alt="" />
+				<figcaption>
+					To explore the data in regards to my third question, how rising corporate ownership affects housing vacancies, I start by mapping the vacancy rate in each neighborhood in 2024. From the map, we see that residential vacancy rates vary modestly across Boston neighborhoods. Most neighborhoods cluster within a relatively narrow range, suggesting that vacancy exhibits localized variation. A small number of neighborhoods display noticeably higher vacancy rates, indicating potential pockets of underutilized housing stock (South Boston Waterfront and Downtown have the highest vacancy rates). This baseline is important for next examining whether areas with rising corporate ownership correspond to elevated vacancy levels.
+				</figcaption>
+			</figure>
+
+			<figure>
+				<img src="Pic8.png" alt="" />
+				<figcaption>
+					In this figure, vacancy rates are expressed as deviations from the citywide average in 2024. Most Boston neighborhoods cluster close to or slightly below the city norm, indicating that elevated vacancy is not widespread. A small number of centrally located neighborhoods display vacancy rates meaningfully above the average, while the majority fall at or below it, suggesting that vacancy pressures are geographically concentrated. Framing vacancy relative to the citywide baseline helps identify which neighborhoods are disproportionately contributing to underutilized housing and sets us up to next evaluate whether those same areas correspond to higher levels of corporate ownership.
+				</figcaption>
+			</figure>
+
+			<figure>
+				<img src="Pic9.png" alt="" />
+				<figcaption>
+					This figure includes both corporate ownership rates (marked by circle size) with residential vacancy rates (marked by color intensity) across Boston neighborhoods in 2024. The same centrally located neighborhoods (South Boston Waterfront and Downtown) display both elevated corporate ownership and higher vacancy rates, this pattern is not uniform across the city. Fenway, for example, has a high corporate owner rate but smaller vacancy rate compared to the other 2 neighborhoods. This spatial comparison suggests that the relationship between corporate ownership and vacancy is not consistently aligned and may be affected by additional neighborhood characteristics such as housing type or demographics. 
+				</figcaption>
+			</figure>
+
+			<figure>
+				<img src="Pic10.png" alt="" />
+				<figcaption>
+					From the last figure, I realized that despite both neighborhoods exhibiting elevated corporate ownership, Fenway’s vacancy rate remains lower than South Boston Waterfront’s. From this, I am left wondering: why does Fenway have high corporate ownership but relatively lower vacancy compared to South Boston Waterfront? My personal familiarity with the city reminds me that Fenway has a substantially higher total college population than most other neighborhoods, while South Boston Waterfront has comparatively few students. This next figure examines whether neighborhoods with larger absolute college student populations exhibit different vacancy patterns. It suggests that the presence of a large student population may help absorb housing supply and alleviate vacancy pressure, even in areas with significant corporate ownership. In another iteration of this figure, I would change the color of Fenway and South Boston Waterfront markings to highlight these are the main points of interest. 
+				</figcaption>
+			</figure>
+
+			<figure>
+				<img src="Pic11.png" alt="" />
+				<figcaption>
+					To account for differences in neighborhood size, this figure evaluates college residents as a proportion of total neighborhood population. When measured in this way, Fenway’s concentration of college students becomes even more pronounced relative to other neighborhoods, while South Boston Waterfront continues to exhibit low student presence alongside higher vacancy. This proportional framing strengthens my hypothesis that sustained student housing demand may reduce vacancy in high corporate ownership neighborhoods by maintaining occupancy levels.
+				</figcaption>
+			</figure>
+
+			<figure>
+				<img src="Pic12.png" alt="" />
+				<figcaption>
+					This figure explores whether the concentration of non-college institutional populations (including military, correctional, juvenile, nursing, and other institutional residents excluding college students) correlates with neighborhood vacancy. Unlike college students, these populations typically do not generate private rental market demand. Although I have added a trend line that shows a slight decrease in vacancy rate with increased non-college institutional share of the population, the figure does not demonstrate a strong relationship between the measures of institutional population share and vacancy rates. Of particular interest, the divergence between Fenway and South Boston Waterfront does not appear to be explained by other institutional housing concentration. This suggests that differences in vacancy across high corporate ownership neighborhoods are more likely to be driven by market-based demographic demand- such as student renters- rather than by institutional population presence.
+				</figcaption>
+			</figure>
+
+		</section>
+
+		<section>
+			<h2>Summary</h2>
+
+			<p>This project examined how corporate housing ownership varies across Boston neighborhoods and to what extent it is associated with racial diversity, housing vacancy, and housing unit composition (via collegial and other institutional populations). Corporate ownership throughout Boston has increased over time on average and is unevenly distributed, with high concentrations in neighborhoods such as Fenway and South Boston Waterfront. The relationship between corporate ownership and vacancy is not consistent across neighborhoods. Some high corporate ownership neighborhoods exhibit elevated vacancy, but others do not. The comparison between Fenway and South Boston Waterfront highlights this divergence and suggests that ownership concentration alone does not determine vacancy outcomes.
+				Exploring potential mechanisms, this analysis indicates that the presence of college student renters may help explain these differences. Fenway’s notable student population appears to be associated with lower vacancy despite high corporate ownership, whereas South Boston Waterfront’s relatively limited student presence coincides with higher vacancy. In comparison, non-college institutional populations do not show a strong relationship with vacancy. Overall, these findings suggest that the effects of corporate ownership are context-dependent and likely affected by local housing demand rather than being uniformly associated with vacancy or neighborhood racial diversity. This analysis is descriptive and does not establish causality, but does highlight the importance of neighborhood-level dynamics in understanding the implications of corporate housing ownership.
+				</p>
+		</section>
+	</main>
+</body>
+</html>
