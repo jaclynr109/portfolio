@@ -77,6 +77,19 @@ button {
     border-radius: 6px;   /* optional but nice */
 }
 
+.projects article {
+    display: grid;
+    grid-template-rows: auto 180px auto; /* title, fixed image row, link */
+    gap: 0.75em;
+}
+.projects article img {
+    width: 100%;
+    height: 100%;       /* fills the 180px grid row */
+    object-fit: cover;
+    display: block;
+    border-radius: 6px;
+}
+
 article {
     display: grid;
     grid-template-rows: subgrid;
