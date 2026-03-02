@@ -63,6 +63,20 @@ button {
     gap: 1em;
 }
 
+.projects article {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+}
+
+.projects article img {
+    width: 100%;          /* never overflow the card */
+    height: 160px;        /* controls thumbnail height */
+    object-fit: cover;    /* crops nicely instead of stretching */
+    display: block;
+    border-radius: 6px;   /* optional but nice */
+}
+
 article {
     display: grid;
     grid-template-rows: subgrid;
